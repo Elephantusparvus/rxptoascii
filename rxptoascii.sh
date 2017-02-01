@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# This script iterates through all ScanPos folders of a 
+# This script iterates through all ScanPos folders of a
 # RIEGL-Laserscan project and converts one scan per
-# pose(the last recorded) to ascii-format using slam6d 
+# pose(the last recorded) to ascii-format using slam6d
 # with the riegllib.
 # Each scan is saved to the defined folder with the following
 # format: scan[PosNr].txt ($PosNr is the three digit number
@@ -14,7 +14,7 @@
 # /path/to/slam6d
 # /path/to/rxpdir
 # /path/to/asciidir
-# 
+#
 # Example for scanpos001:
 # /path/to/riegl/proj/SCANS/ScanPos001/SINGLESCANS/160624_120918.rxp
 #
@@ -23,6 +23,10 @@
 # and
 # /path/to/asciidir/scan001.3d
 
+# enable extended globbing. necessary for determining the correct rxp-scans
+shopt -s extglob
+
+# replace this with reading from args.
 echo "Please enter project directory(FULL PATH)!"
 read project_path
 echo "Please enter slam6d root directory path(the slam6d-code folder FULL PATH)!"
@@ -102,8 +106,8 @@ do
 
     path="$project_path/SCANS/ScanPos$c/SINGLESCANS/"
     if [ -a "$path" ]; then
-    
-        cd $path 
+
+        cd $path
 
         # get all .rxp-files(these are the scans of this position)
         # exclude monitor files.
@@ -112,7 +116,7 @@ do
             count=$(($count+1))
             echo $j
             names[$count]=$j
-        done  
+        done
 
         latestscan=${names[0]}
         if [ -a "$latestscan" ]; then
@@ -143,7 +147,7 @@ do
             echo "Creating dummypose: scan$c.pose"
             touch scan$c.pose
             echo -e "0 0 0\n0 0 0" > scan$c.pose
-            
+
 
             echo "Converting scan$c.rxp"
             $slam6d/bin/slam6D -f rxp -s$i -e$i --exportAllPoints $path
@@ -159,7 +163,7 @@ do
 
         else
             echo "There were no rxp-scans in $project_path/ScanPos$c"
-        fi 
+        fi
         else
             echo "$project_path/ScanPos$c/SINGLESCANS does not exist"
     fi
