@@ -12,18 +12,22 @@ linked against the riegl library.
 Each scan is saved to the defined folder with the following format:
 scan[PosNr].txt ($PosNr is the three digit number of the ScanPos)
 
+Usage:
+./rxptoascii /path/to/rieglproj/ /path/to/slam6d /path/to/renamedrxpdir /path/to/asciidir
+
+/path/to/rieglproj/ (root directory of the scan project)
+/path/to/slam6d/ (root directory of slam6d)
+/path/to/renamedrxpdir/ (will contain copies of the rxp renamed to scanXXX.rxp)
+/path/to/asciidir (will contain the asciiconverted scans)
+
+
 Example:
-./rxptoascii.sh
-/path/to/rieglproj/ (root directory of the scan-project)
-/path/to/slam6d     (root directory of slam6d, normally "slam6d-code")
-/path/to/rxpdir
-/path/to/asciidir
+./rxptoascii.sh /path/to/rieglproj/ /path/to/slam6d /path/to/renamedrxpdir /path/to/asciidir
 
 Example for scanpos001:
 /path/to/rieglproj/SCANS/ScanPos001/SINGLESCANS/160624_120918.rxp
 
 results in:
-
 /path/to/rxpdir/scan001.rxp
 and
 /path/to/asciidir/scan001.3d
