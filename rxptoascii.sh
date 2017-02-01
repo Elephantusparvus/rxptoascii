@@ -26,15 +26,39 @@
 # enable extended globbing. necessary for determining the correct rxp-scans
 shopt -s extglob
 
-# replace this with reading from args.
-echo "Please enter project directory(FULL PATH)!"
-read project_path
-echo "Please enter slam6d root directory path(the slam6d-code folder FULL PATH)!"
-read slam6d
-echo "Please enter destination folder for renamed rxp-scans(FULL PATH)! If it is not existing it will be created."
-read rxp_dir
-echo "Please enter destination folder for converted scans(FULL PATH)! If it is not existing it will be created."
-read scans_txt_path
+help="./rxptoascii /path/to/rieglproj/ /path/to/slam6d /path/to/renamedrxpdir /path/to/asciidir"
+
+print_help() {
+    echo ""
+    echo "Usage:"
+    echo "$help"
+    exit
+}
+
+project_path=$1
+slam6d=$2
+rxp_dir=$3
+scans_txt_path=$4
+
+if [ -z $project_path ]; then
+    echo "Please specify the path to the project (root directory)"
+    print_help
+fi
+
+if [ -z $slam6d ]; then
+    echo "Please specify the path to slam6D (root directory)"
+    print_help
+fi
+
+if [ -z $rxp_dir ]; then
+    echo "No directory for renamed rxp"
+    print_help
+fi
+
+if [ -z $scans_txt_path ]; then
+    echo "No directory for converted scans"
+    print_help
+fi
 
 if ! [ -a "$scans_txt_path" ]; then
     mkdir -p $scans_txt_path
@@ -42,7 +66,7 @@ fi
 
 if ! [ -d "$scans_txt_path" ]; then
     echo "$scans_txt_path is existing but no directory. Please enter correct destination folder"
-    exit
+    print_help
 fi
 
 if ! [ -a "$rxp_dir" ]; then
@@ -51,27 +75,27 @@ fi
 
 if ! [ -d "$rxp_dir" ]; then
     echo "$rxp_dir is existing but no directory. Please enter correct destination folder"
-    exit
+    print_help
 fi
 
 if ! [ -a "$project_path" ]; then
     echo "$project_path is not existing. Please enter correct project path."
-    exit
+    print_help
 fi
 
 if ! [ -d "$project_path" ]; then
     echo "$project_path is existing but no directory. Please enter correct project path."
-    exit
+    print_help
 fi
 
-if ! [ -a "$slam6d" ]; then
-    echo "$slam6d is not existing. Please enter correct slam6d path."
-    exit
+if ! [ -a "$slam6d/bin/slam6D" ]; then
+    echo "Could not find a bin directory for slam6D in $slam6d. Please enter the correct slam6d path(root directory)."
+    print_help
 fi
 
 if ! [ -d "$slam6d" ]; then
     echo "$slam6d is existing but no directory. Please enter correct slam6d path."
-    exit
+    print_help
 fi
 
 
